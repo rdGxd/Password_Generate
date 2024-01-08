@@ -1,11 +1,13 @@
 import { useRef, useState } from "react";
 import { InputValue } from "./components/Input";
 import { LabelInput } from "./components/Label/input";
+import { NumberChecked } from "./utils/NumberChecked";
 
 function App() {
   const [change, setChange] = useState(false);
   const [changeNumber, setChangeNumber] = useState(false);
-  const refPass = useRef<HTMLHeadingElement>(null);
+  const [lengthPassword, setLengthPassword] = useState("");
+  const refPass = useRef<HTMLInputElement>(null);
   const refLength = useRef<HTMLInputElement>(null);
 
   const handleChange = () => {
@@ -17,22 +19,29 @@ function App() {
   };
 
   const handlePasswordGenerate = () => {
+    if (refLength.current) {
+      if (
+        Number(refLength.current.value) < 8 ||
+        Number(refLength.current.value) > 16
+      ) {
+        return alert("O valor mínimo permitido é de 8 e o máximo é de 16");
+      }
+    }
+
     if (change && changeNumber) {
       if (refPass.current) {
-        return (refPass.current.textContent = "Ambos true");
+        return (refPass.current.value = "Ambos true");
       }
     }
 
     if (change && !changeNumber) {
       if (refPass.current) {
-        return (refPass.current.textContent = "Apenas change true");
+        return (refPass.current.value = "Apenas change true");
       }
     }
 
     if (!change && changeNumber) {
-      if (refPass.current) {
-        return (refPass.current.textContent = "Apenas changeNumber true");
-      }
+      return NumberChecked({ length: refLength, refPass });
     }
 
     if (!change && !changeNumber) {
@@ -42,19 +51,26 @@ function App() {
 
   return (
     <div className=" bg-gray-500 p-5">
-      <h1 className="mb-10 text-xl" ref={refPass}>
-        Gerador de password
-      </h1>
+      <input
+        type="text"
+        ref={refPass}
+        className="mb-10 w-fit rounded p-2 disabled:bg-white"
+        defaultValue={""}
+        disabled
+      />
+
       <form action="" className="flex flex-col">
         <div>
           <LabelInput htmlFor="tamanho" text="Tamanho da senha:" />
           <input
             type="number"
-            max={16}
-            min={8}
             name="tamanho"
+            id="tamanho"
+            min={8}
+            max={16}
+            value={lengthPassword}
+            onChange={(e) => setLengthPassword(e.currentTarget.value)}
             className="ml-5"
-            value={8}
             ref={refLength}
           />
         </div>
