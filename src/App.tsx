@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { InputValue } from "./components/Input";
 import { LabelInput } from "./components/Label/input";
+import { AllChecked } from "./utils/AllCheckds";
 import { BothChecked } from "./utils/BothChecked";
-import { NumberChecked } from "./utils/NumberChecked";
 import { LettersChecked } from "./utils/LettersChecked";
+import { NumberChecked } from "./utils/NumberChecked";
 
 function App() {
   const [changeCaracteres, setChangeCaracteres] = useState(false);
@@ -27,12 +28,13 @@ function App() {
 
   const handlePasswordGenerate = () => {
     if (refLength.current) {
-      if (
-        Number(refLength.current.value) < 8 ||
-        Number(refLength.current.value) > 16
-      ) {
-        return alert("O valor mínimo permitido é de 8 e o máximo é de 16");
+      if (!Number(refLength.current.value)) {
+        return alert("Digite um valor para o tamanho mínimo da sua senha");
       }
+    }
+
+    if (changeLetters && changeCaracteres && changeNumber) {
+      return AllChecked({ length: refLength, refPass });
     }
 
     if (changeLetters && changeNumber) {
@@ -63,8 +65,6 @@ function App() {
             type="number"
             name="tamanho"
             id="tamanho"
-            min={8}
-            max={16}
             value={lengthPassword}
             onChange={(e) => setLengthPassword(e.currentTarget.value)}
             className="ml-5"
