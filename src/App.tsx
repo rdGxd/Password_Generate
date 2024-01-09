@@ -1,21 +1,28 @@
 import { useRef, useState } from "react";
 import { InputValue } from "./components/Input";
 import { LabelInput } from "./components/Label/input";
+import { BothChecked } from "./utils/BothChecked";
 import { NumberChecked } from "./utils/NumberChecked";
+import { LettersChecked } from "./utils/LettersChecked";
 
 function App() {
-  const [change, setChange] = useState(false);
+  const [changeCaracteres, setChangeCaracteres] = useState(false);
   const [changeNumber, setChangeNumber] = useState(false);
-  const [lengthPassword, setLengthPassword] = useState("");
-  const refPass = useRef<HTMLInputElement>(null);
+  const [changeLetters, setChangeLetters] = useState(false);
+  const [lengthPassword, setLengthPassword] = useState("8");
+  const refPass = useRef<HTMLHeadingElement>(null);
   const refLength = useRef<HTMLInputElement>(null);
 
-  const handleChange = () => {
-    setChange(!change);
+  const handleChangeCaracteres = () => {
+    setChangeCaracteres(!changeCaracteres);
   };
 
   const handleChangeNumber = () => {
     setChangeNumber(!changeNumber);
+  };
+
+  const handleChangeLetters = () => {
+    setChangeLetters(!changeLetters);
   };
 
   const handlePasswordGenerate = () => {
@@ -28,36 +35,26 @@ function App() {
       }
     }
 
-    if (change && changeNumber) {
-      if (refPass.current) {
-        return (refPass.current.value = "Ambos true");
-      }
+    if (changeLetters && changeNumber) {
+      return BothChecked({ length: refLength, refPass });
     }
 
-    if (change && !changeNumber) {
-      if (refPass.current) {
-        return (refPass.current.value = "Apenas change true");
-      }
+    if (changeLetters && !changeNumber) {
+      return LettersChecked({ length: refLength, refPass });
     }
 
-    if (!change && changeNumber) {
+    if (!changeLetters && changeNumber) {
       return NumberChecked({ length: refLength, refPass });
     }
 
-    if (!change && !changeNumber) {
+    if (!changeLetters && !changeNumber) {
       return alert("Selecione uma opção");
     }
   };
 
   return (
     <div className=" bg-gray-500 p-5">
-      <input
-        type="text"
-        ref={refPass}
-        className="mb-10 w-fit rounded p-2 disabled:bg-white"
-        defaultValue={""}
-        disabled
-      />
+      <h1 ref={refPass} className="mb-5 bg-white p-5 text-2xl font-bold"></h1>
 
       <form action="" className="flex flex-col">
         <div>
@@ -74,7 +71,16 @@ function App() {
             ref={refLength}
           />
         </div>
-
+        <div>
+          <LabelInput htmlFor="letras" text="Conter Letras:" />
+          <InputValue
+            type="checkbox"
+            checked={changeLetters}
+            name="letras"
+            id="letras"
+            fn={handleChangeLetters}
+          />
+        </div>
         <div>
           <LabelInput htmlFor="number" text="Conter Números:" />
           <InputValue
@@ -91,8 +97,8 @@ function App() {
             type="checkbox"
             id="caracteres"
             name="caracteres"
-            checked={change}
-            fn={handleChange}
+            checked={changeCaracteres}
+            fn={handleChangeCaracteres}
           />
         </div>
         <button
