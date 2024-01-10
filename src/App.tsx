@@ -1,16 +1,13 @@
 import { useRef, useState } from "react";
-import { InputValue } from "./components/Input";
-import { LabelInput } from "./components/Label/input";
-import { AllChecked } from "./utils/AllCheckds";
-import { BothChecked } from "./utils/BothChecked";
-import { LettersChecked } from "./utils/LettersChecked";
-import { NumberChecked } from "./utils/NumberChecked";
+import { InputValue, LabelInput } from "./components";
+import { Button } from "./components/Button";
+import { AllChecked, BothChecked, NumberChecked } from "./utils";
 
 function App() {
-  const [changeCaracteres, setChangeCaracteres] = useState(false);
-  const [changeNumber, setChangeNumber] = useState(false);
-  const [changeLetters, setChangeLetters] = useState(false);
-  const [lengthPassword, setLengthPassword] = useState("8");
+  const [changeCaracteres, setChangeCaracteres] = useState(true);
+  const [changeNumber, setChangeNumber] = useState(true);
+  const [changeLetters, setChangeLetters] = useState(true);
+  const [lengthPassword, setLengthPassword] = useState("16");
   const refPass = useRef<HTMLHeadingElement>(null);
   const refLength = useRef<HTMLInputElement>(null);
 
@@ -41,10 +38,6 @@ function App() {
       return BothChecked({ length: refLength, refPass });
     }
 
-    if (changeLetters && !changeNumber) {
-      return LettersChecked({ length: refLength, refPass });
-    }
-
     if (!changeLetters && changeNumber) {
       return NumberChecked({ length: refLength, refPass });
     }
@@ -55,60 +48,62 @@ function App() {
   };
 
   return (
-    <div className=" bg-gray-500 p-5">
-      <h1 ref={refPass} className="mb-5 bg-white p-5 text-2xl font-bold"></h1>
-
-      <form action="" className="flex flex-col">
-        <div>
-          <LabelInput htmlFor="tamanho" text="Tamanho da senha:" />
-          <input
-            type="number"
-            name="tamanho"
-            id="tamanho"
-            value={lengthPassword}
-            onChange={(e) => setLengthPassword(e.currentTarget.value)}
-            className="ml-5"
-            ref={refLength}
+    <div className="flex justify-center">
+      <div className=" mt-52 w-fit rounded-lg  bg-gray-500 p-4 md:w-1/2">
+        <h1
+          ref={refPass}
+          className="mb-5 bg-white p-5 text-center text-2xl font-bold"
+        />
+        <form action="" className="flex flex-col ">
+          <div>
+            <LabelInput htmlFor="tamanho" text="Tamanho da senha:" />
+            <InputValue
+              type="number"
+              name="tamanho"
+              id="tamanho"
+              value={lengthPassword}
+              fnSet={setLengthPassword}
+              className="ml-5 w-10"
+              ref1={refLength}
+            />
+          </div>
+          <div>
+            <LabelInput htmlFor="letras" text="Conter Letras:" />
+            <InputValue
+              type="checkbox"
+              checked={changeLetters}
+              name="letras"
+              id="letras"
+              fn={handleChangeLetters}
+            />
+          </div>
+          <div>
+            <LabelInput htmlFor="number" text="Conter Números:" />
+            <InputValue
+              type="checkbox"
+              checked={changeNumber}
+              name="number"
+              id="number"
+              fn={handleChangeNumber}
+            />
+          </div>
+          <div>
+            <LabelInput htmlFor="caracteres" text="Conter Caracteres:" />
+            <InputValue
+              type="checkbox"
+              id="caracteres"
+              name="caracteres"
+              checked={changeCaracteres}
+              fn={handleChangeCaracteres}
+            />
+          </div>
+          <Button
+            type="button"
+            onClick={handlePasswordGenerate}
+            text="Gerar nova senha"
           />
-        </div>
-        <div>
-          <LabelInput htmlFor="letras" text="Conter Letras:" />
-          <InputValue
-            type="checkbox"
-            checked={changeLetters}
-            name="letras"
-            id="letras"
-            fn={handleChangeLetters}
-          />
-        </div>
-        <div>
-          <LabelInput htmlFor="number" text="Conter Números:" />
-          <InputValue
-            type="checkbox"
-            checked={changeNumber}
-            name="number"
-            id="number"
-            fn={handleChangeNumber}
-          />
-        </div>
-        <div className="">
-          <LabelInput htmlFor="caracteres" text="Conter Caracteres:" />
-          <InputValue
-            type="checkbox"
-            id="caracteres"
-            name="caracteres"
-            checked={changeCaracteres}
-            fn={handleChangeCaracteres}
-          />
-        </div>
-        <button
-          type="button"
-          className="mt-5 rounded-full border border-black p-3"
-          onClick={handlePasswordGenerate}
-        >
-          Gerar senha
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

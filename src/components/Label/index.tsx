@@ -6,7 +6,7 @@ interface ILabelInput {
 export const LabelInput = ({ htmlFor, text }: ILabelInput) => {
   return (
     <>
-      <label htmlFor={htmlFor}>{text}</label>
+      <label htmlFor={htmlFor} className="text-white">{text}</label>
     </>
   );
 };
