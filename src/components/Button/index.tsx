@@ -14,7 +14,9 @@ export const Button = ({ onClick, text, type, className }: IButtonProps) => {
     <button
       type={type}
       className={
-        className ? className : "mt-5 rounded-full border border-black p-3"
+        className
+          ? className
+          : "mt-5 rounded-full border border-white bg-gray-500 p-3 text-black transition hover:bg-gray-900 hover:text-white"
       }
       onClick={handleClick}
     >

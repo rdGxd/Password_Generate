@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
-import { InputValue, LabelInput } from "./components";
-import { Button } from "./components/Button";
+import { Button, InputValue, LabelInput } from "./components";
 import { AllChecked, BothChecked, NumberChecked } from "./utils";
 
 function App() {
@@ -30,6 +29,18 @@ function App() {
       }
     }
 
+    if (changeCaracteres && !changeNumber && !changeLetters) {
+      return alert("Se quiser usar os caracteres selecione todas as opções");
+    }
+
+    if (changeCaracteres && changeNumber && !changeLetters) {
+      return alert("Se quiser usar os caracteres selecione todas as opções");
+    }
+
+    if (changeCaracteres && !changeNumber && changeLetters) {
+      return alert("Se quiser usar os caracteres selecione todas as opções");
+    }
+
     if (changeLetters && changeCaracteres && changeNumber) {
       return AllChecked({ length: refLength, refPass });
     }
@@ -48,13 +59,13 @@ function App() {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className=" mt-52 w-fit rounded-lg  bg-gray-500 p-4 md:w-1/2">
+    <div className="flex justify-center ">
+      <div className=" mt-52 w-fit rounded-lg  bg-gray-500 p-4 md:w-fit ">
         <h1
           ref={refPass}
-          className="mb-5 bg-white p-5 text-center text-2xl font-bold"
+          className="mb-5 bg-white p-5 text-center text-2xl font-bold md:w-fit"
         />
-        <form action="" className="flex flex-col ">
+        <form action="" className="flex flex-col md:items-center">
           <div>
             <LabelInput htmlFor="tamanho" text="Tamanho da senha:" />
             <InputValue
